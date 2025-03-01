@@ -42,7 +42,6 @@ import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import org.jetbrains.skiko.SkiaLayer
 import org.w3c.dom.css.Counter
 
-
 val river = driver()
 @Composable
 fun LoadImg(link : String) {
