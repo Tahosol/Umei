@@ -36,6 +36,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import coil3.compose.AsyncImage
+import coil3.compose.AsyncImagePainter
 import kotlinx.coroutines.*
 import okhttp3.internal.immutableListOf
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
@@ -46,7 +47,7 @@ val river = driver()
 @Composable
 fun LoadImg(link : String) {
     AsyncImage(
-        model = link,
+        model = "https://wsrv.nl/?url="+link,
         contentDescription = null,
         modifier = Modifier
             .padding(16.dp)
@@ -63,7 +64,7 @@ fun LoadMain(imageUrl: String, description: String, Link : String) {
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         AsyncImage(
-            model = imageUrl,
+            model = "https://wsrv.nl/?url="+imageUrl,
             contentDescription = description,
             modifier = Modifier
                 .padding(16.dp)
@@ -75,7 +76,7 @@ fun LoadMain(imageUrl: String, description: String, Link : String) {
                 .clickable {
                     println(river._BasePage+Link)
                     val FunctionnalLink = river._BasePage+Link
-                    navigator?.push(NovelDetail(imageUrl, description, FunctionnalLink))
+                    navigator?.push(NovelDetail("https://wsrv.nl/?url="+imageUrl, description, FunctionnalLink))
                     Change = 2
                            },
             contentScale = ContentScale.Crop
@@ -89,7 +90,7 @@ fun LoadMain(imageUrl: String, description: String, Link : String) {
     }
 }
 
-data class HomeScreen(var but : Boolean = true) : Screen {
+class HomeScreen() : Screen {
     @Composable
     @Preview
     override fun Content() {
@@ -97,9 +98,11 @@ data class HomeScreen(var but : Boolean = true) : Screen {
         val novelCovers = remember { mutableStateListOf<String>() }
         val novelNames = remember { mutableStateListOf<String>() }
         val novellink = remember { mutableStateListOf<String>() }
+        var Loading by remember { mutableStateOf(true) }
         LaunchedEffect(page) {
             val result = withContext(Dispatchers.IO) {
                 river.TrangChu(page)
+                Loading = false
             }
         }
         novelCovers.clear()
@@ -108,15 +111,12 @@ data class HomeScreen(var but : Boolean = true) : Screen {
         novelCovers.addAll(river.BiaTruyen)
         novelNames.addAll(river.TruyenList)
         novellink.addAll(river.TruyenLink)
-        var buttonVisible by remember { mutableStateOf(true) }
-        buttonVisible = but
 
         val gridState = rememberLazyGridState()
 
         val reachedBottom: Boolean by remember {
             derivedStateOf {
                 val lastVisibleItem = gridState.layoutInfo.visibleItemsInfo.lastOrNull()
-                println(lastVisibleItem?.index)
                 lastVisibleItem?.index != 0 && lastVisibleItem?.index == gridState.layoutInfo.totalItemsCount - 1
             }
         }
@@ -125,45 +125,59 @@ data class HomeScreen(var but : Boolean = true) : Screen {
                 page++
             }
         }
-        Box(modifier = Modifier.background(Color(0xFF232634)), contentAlignment = Alignment.Center) {
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(200.dp),
-                state = gridState,
-                contentPadding = PaddingValues(
-                    start = 20.dp,
-                    top = 24.dp,
-                    end = 20.dp,
-                    bottom = 24.dp
-                ),
-                modifier = Modifier
-                    .background(color = Color(0xFF232634))
-                    .fillMaxSize(),
-                content = {
-                    items(novelNames.size) { index -> LoadMain(novelCovers[index], novelNames[index], novellink[index]) }
-                    item {
-                        Text("Number of times pressed: " + page.toString(), color = Color(0xFF232634))
-                    }
-                }
-            )
-            if (buttonVisible) {
-                Button(
-                    onClick = {
-                        page++
-                        buttonVisible = false
-                        but = false
-                    },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF8caaee)),
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFF232634)),
+            contentAlignment = Alignment.Center
+        ) {
+            if (Loading) {
+                CircularProgressIndicator(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .height(100.dp)
-                        .width(140.dp)
-                ) {
-                    Text(
-                        "Load",
-                        color = Color(0xFFc6d0f5),
-                    )
-                }
+                        .width(150.dp)
+                        .align(alignment = Alignment.Center)
+                        .height(150.dp),
+                    color = Color(0xFFc6d0f5)
+                )
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(200.dp),
+                    state = gridState,
+                    contentPadding = PaddingValues(
+                        start = 20.dp,
+                        top = 24.dp,
+                        end = 20.dp,
+                        bottom = 24.dp
+                    ),
+                    modifier = Modifier
+                        .background(color = Color(0xFF232634))
+                        .fillMaxSize(),
+                    content = {
+                        items(novelNames.size) { index -> LoadMain(novelCovers[index], novelNames[index], novellink[index]) }
+                        item {
+                            Text("Number of times pressed: " + page.toString(), color = Color(0xFF232634))
+                        }
+                    }
+                )
             }
+//            if (buttonVisible) {
+//                Button(
+//                    onClick = {
+//                        page++
+//                        buttonVisible = false
+//                        but = false
+//                    },
+//                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF8caaee)),
+//                    modifier = Modifier
+//                        .clip(RoundedCornerShape(12.dp))
+//                        .height(100.dp)
+//                        .width(140.dp)
+//                ) {
+//                    Text(
+//                        "Load",
+//                        color = Color(0xFFc6d0f5),
+//                    )
+//                }
+//            }
         }
     }
 }
@@ -409,7 +423,7 @@ data class NovelDetail(val Img: String, val name: String, val link : String) : S
             }
             Button(
                 onClick = {
-                    navigator?.push(HomeScreen(false))
+                    navigator?.pop()
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF8caaee)),
                 modifier = Modifier
