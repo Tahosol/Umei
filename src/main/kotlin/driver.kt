@@ -1,6 +1,5 @@
-import okhttp3.internal.wait
 import org.jsoup.Jsoup
-import kotlin.concurrent.thread
+
 
 class driver {
     val _MainPage: String = "https://ln.hako.vn/danh-sach?truyendich=1&sangtac=1&dangtienhanh=1&tamngung=1&hoanthanh=1&sapxep=capnhat&page="
