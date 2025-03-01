@@ -10,7 +10,6 @@ class driver {
     val TruyenList : MutableList<String> = mutableListOf()
     val TruyenLink : MutableList<String> = mutableListOf()
     val BiaTruyen : MutableList<String> = mutableListOf()
-
     fun TrangChu(_Page : Int = 0) {
         val page = _Page
         Thread.sleep(2000)

@@ -52,7 +52,8 @@ fun LoadImg(link : String) {
         modifier = Modifier
             .padding(16.dp)
             .clip(RoundedCornerShape(12.dp)),
-        contentScale = ContentScale.Fit
+        contentScale = ContentScale.Fit,
+        alignment = Alignment.Center
     )
 }
 @Composable
@@ -98,22 +99,21 @@ data class HomeScreen(var but : Boolean = true) : Screen {
         val novelCovers = remember { mutableStateListOf<String>() }
         val novelNames = remember { mutableStateListOf<String>() }
         val novellink = remember { mutableStateListOf<String>() }
-
         LaunchedEffect(page) {
             val result = withContext(Dispatchers.IO) {
                 river.TrangChu(page)
             }
-
         }
-        var buttonVisible by remember { mutableStateOf(true) }
-        buttonVisible = but
-
         novelCovers.clear()
         novelNames.clear()
         novellink.clear()
         novelCovers.addAll(river.BiaTruyen)
         novelNames.addAll(river.TruyenList)
         novellink.addAll(river.TruyenLink)
+        var buttonVisible by remember { mutableStateOf(true) }
+        buttonVisible = but
+
+
 
 
         val gridState = rememberLazyGridState()
@@ -199,12 +199,17 @@ data class Reader(val Chap : List<String>, val link: String, var rerun : Boolean
                         .width(1000.dp),
                 ) {
                     items(content.size) { index: Int ->
-                        val line = content[index]
-                        println(line.substring(0,2))
-                        if (line.substring(0,2) == "ht") {
-                            LoadImg(content[index])
-                        } else {
-                            Text(
+                        val line : String = content[index]
+                        when {
+                                line.length < 2 -> Text(
+                                text = content[index],
+                                modifier = Modifier
+                                    .padding(16.dp),
+                                fontSize = 26.sp,
+                                color = Color(0xFFdce0e8),
+                            )
+                            line.substring(0,2) == "ht" -> LoadImg(content[index])
+                            else -> Text(
                                 text = content[index],
                                 modifier = Modifier
                                     .padding(16.dp),
@@ -303,11 +308,13 @@ fun Body(Name : List<String>, Link : List<String>, sum : List<String>) {
     Row(
         modifier = Modifier
             .padding(16.dp)
+            .fillMaxSize()
     ) {
         LazyColumn(
             modifier = Modifier
                 .border(3.dp, color = Color(0xFFc6d0f5))
                 .padding(16.dp)
+                .width(800.dp)
         ) {
             items(Name.size) { index ->
                 Text(
@@ -327,7 +334,7 @@ fun Body(Name : List<String>, Link : List<String>, sum : List<String>) {
         Column(
             modifier = Modifier
                 .border(3.dp, color = Color(0xFFc6d0f5))
-                .padding(16.dp),
+                .padding(16.dp)
         ) {
             Text(
                 text = "Summary",
