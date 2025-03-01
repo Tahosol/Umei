@@ -159,25 +159,6 @@ class HomeScreen() : Screen {
                     }
                 )
             }
-//            if (buttonVisible) {
-//                Button(
-//                    onClick = {
-//                        page++
-//                        buttonVisible = false
-//                        but = false
-//                    },
-//                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF8caaee)),
-//                    modifier = Modifier
-//                        .clip(RoundedCornerShape(12.dp))
-//                        .height(100.dp)
-//                        .width(140.dp)
-//                ) {
-//                    Text(
-//                        "Load",
-//                        color = Color(0xFFc6d0f5),
-//                    )
-//                }
-//            }
         }
     }
 }
