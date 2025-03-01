@@ -111,7 +111,6 @@ data class HomeScreen(var but : Boolean = true) : Screen {
         var buttonVisible by remember { mutableStateOf(true) }
         buttonVisible = but
 
-
         val gridState = rememberLazyGridState()
 
         val reachedBottom: Boolean by remember {
