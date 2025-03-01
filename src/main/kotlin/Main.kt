@@ -113,13 +113,12 @@ data class HomeScreen(var but : Boolean = true) : Screen {
         buttonVisible = but
 
 
-
-
         val gridState = rememberLazyGridState()
 
         val reachedBottom: Boolean by remember {
             derivedStateOf {
                 val lastVisibleItem = gridState.layoutInfo.visibleItemsInfo.lastOrNull()
+                println(lastVisibleItem?.index)
                 lastVisibleItem?.index != 0 && lastVisibleItem?.index == gridState.layoutInfo.totalItemsCount - 1
             }
         }
@@ -171,26 +170,35 @@ data class HomeScreen(var but : Boolean = true) : Screen {
     }
 }
 
-data class Reader(val Chap : List<String>, val link: String, var rerun : Boolean = false) : Screen {
+data class Reader(val Chaplink : List<String>, val link: String) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
+        var content = remember { mutableStateListOf<String>() }
+        var Load by remember { mutableStateOf(true) }
         river.Clear()
-        river.Reader(link)
-//        val content : List<String> = river.read
-
-        var changes by remember { mutableStateOf(0) }
-        if (rerun == true) {
-            changes++
+        LaunchedEffect(Unit) {
+            val I = withContext(Dispatchers.IO) {
+                river.Reader(link)
+                content.addAll(river.read)
+                Load = false
+            }
         }
-        key(changes) {
-            val content : List<String> = river.read
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = Color(0xFF232634)),
-                contentAlignment = Alignment.Center
-            ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color(0xFF232634)),
+            contentAlignment = Alignment.Center
+        ) {
+            if (Load) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .width(150.dp)
+                        .align(alignment = Alignment.Center)
+                        .height(150.dp),
+                    color = Color(0xFFc6d0f5)
+                )
+            } else {
                 LazyColumn(
                     modifier = Modifier
                         .background(color = Color(0xFF232634))
@@ -199,7 +207,7 @@ data class Reader(val Chap : List<String>, val link: String, var rerun : Boolean
                     items(content.size) { index: Int ->
                         val line : String = content[index]
                         when {
-                                line.length < 2 -> Text(
+                            line.length < 2 -> Text(
                                 text = content[index],
                                 modifier = Modifier
                                     .padding(16.dp),
@@ -218,6 +226,7 @@ data class Reader(val Chap : List<String>, val link: String, var rerun : Boolean
                     }
                 }
             }
+
         }
 
         Button(
@@ -239,6 +248,7 @@ fun Top(img : String, name : String, likes : String, Tacgia : String, Theloai : 
         modifier = Modifier
             .background(color = Color(0xFF232634))
             .padding(16.dp)
+            .fillMaxWidth()
     ) {
         AsyncImage(
             model = img,
@@ -321,7 +331,7 @@ fun Body(Name : List<String>, Link : List<String>, sum : List<String>) {
                         .clickable {
                             val link = river._BasePage+Link[index]
                             println(link)
-                            navigator?.push(Reader(Name, link))
+                            navigator?.push(Reader(Link, link))
                         }
                         .padding(10.dp),
                     color = Color(0xFFc6d0f5),
@@ -357,15 +367,25 @@ fun Body(Name : List<String>, Link : List<String>, sum : List<String>) {
 data class NovelDetail(val Img: String, val name: String, val link : String) : Screen {
     @Composable
     override fun Content() {
+        var IsLoading by remember { mutableStateOf(true) }
+        var ChuongLink = remember { mutableStateListOf<String>() }
+        var Chuong = remember { mutableStateListOf<String>() }
+        var Sum = remember { mutableStateListOf<String>() }
         river.Clear()
-        river.TrangTruyen(link)
+        LaunchedEffect(Unit) {
+            val i = withContext(Dispatchers.IO) {
+                river.TrangTruyen(link)
+                ChuongLink.addAll(river.ChuongLink)
+                Chuong.addAll(river.ChuongName)
+                Sum.addAll(river.Sum)
+                IsLoading = false
+            }
+        }
         val navigator = LocalNavigator.current
-        val ChongLink : List<String> = river.ChuongLink
-        val Chuong : List<String> = river.ChuongName
+
         val Like = river.Likes
         val Tacgia = river.Tacgia
         val Theloai : List<String> = river.TheLoai
-        val sum = river.Sum
         Box(
             modifier = Modifier
                 .background(color = Color(0xFF232634))
@@ -373,10 +393,21 @@ data class NovelDetail(val Img: String, val name: String, val link : String) : S
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Top(Img, name, Like, Tacgia, Theloai)
-                Body(Chuong, ChongLink, sum)
+                if (!IsLoading) {
+                    Top(Img, name, Like, Tacgia, Theloai)
+                    Body(Chuong, ChuongLink, Sum)
+                } else {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .width(150.dp)
+                            .height(150.dp),
+                        color = Color(0xFFc6d0f5)
+                    )
+                }
             }
             Button(
                 onClick = {
