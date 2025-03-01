@@ -27,7 +27,6 @@ dependencies {
     implementation("cafe.adriel.voyager:voyager-navigator:1.0.1")
     implementation("cafe.adriel.voyager:voyager-tab-navigator:1.0.1")
     implementation("cafe.adriel.voyager:voyager-transitions:1.0.1")
-
 }
 
 compose.desktop {

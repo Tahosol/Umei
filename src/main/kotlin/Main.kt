@@ -95,7 +95,6 @@ data class HomeScreen(var but : Boolean = true) : Screen {
     @Preview
     override fun Content() {
         var page by remember { mutableStateOf(1) }
-
         val novelCovers = remember { mutableStateListOf<String>() }
         val novelNames = remember { mutableStateListOf<String>() }
         val novellink = remember { mutableStateListOf<String>() }
@@ -124,7 +123,11 @@ data class HomeScreen(var but : Boolean = true) : Screen {
                 lastVisibleItem?.index != 0 && lastVisibleItem?.index == gridState.layoutInfo.totalItemsCount - 1
             }
         }
-
+        LaunchedEffect(reachedBottom) {
+            if (reachedBottom) {
+                page++
+            }
+        }
         Box(modifier = Modifier.background(Color(0xFF232634)), contentAlignment = Alignment.Center) {
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(200.dp),
@@ -145,11 +148,6 @@ data class HomeScreen(var but : Boolean = true) : Screen {
                     }
                 }
             )
-            val Check = page - 1
-            if (reachedBottom && Check < page ) {
-                page++
-                Thread.sleep(2000)
-            }
             if (buttonVisible) {
                 Button(
                     onClick = {

@@ -12,7 +12,7 @@ class driver {
     val BiaTruyen : MutableList<String> = mutableListOf()
     fun TrangChu(_Page : Int = 0) {
         val page = _Page
-        Thread.sleep(2000)
+//        Thread.sleep(2000)
         val driver = Jsoup.connect(_MainPage+page)
             .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.3")
             .get()
