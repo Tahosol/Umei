@@ -47,7 +47,7 @@ val river = driver()
 @Composable
 fun LoadImg(link : String) {
     AsyncImage(
-        model = "https://wsrv.nl/?url="+link,
+        model = link,
         contentDescription = null,
         modifier = Modifier
             .padding(16.dp)
@@ -182,16 +182,21 @@ class HomeScreen() : Screen {
     }
 }
 
-data class Reader(val Chaplink : List<String>, val link: String) : Screen {
+data class Reader(val Chaplink : List<String>, val link: String, val chap : Int) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
         var content = remember { mutableStateListOf<String>() }
         var Load by remember { mutableStateOf(true) }
+        var Chap by remember { mutableStateOf(chap) }
+        println(Chap)
+        println(Chaplink.size)
         river.Clear()
-        LaunchedEffect(Unit) {
+        LaunchedEffect(Chap) {
             val I = withContext(Dispatchers.IO) {
-                river.Reader(link)
+                content.clear()
+                river.Clear()
+                river.Reader(river._BasePage+Chaplink[Chap])
                 content.addAll(river.read)
                 Load = false
             }
@@ -202,6 +207,30 @@ data class Reader(val Chaplink : List<String>, val link: String) : Screen {
                 .background(color = Color(0xFF232634)),
             contentAlignment = Alignment.Center
         ) {
+
+            Button(
+                onClick = {
+                    if (Chap < Chaplink.size - 1) Chap++
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF8caaee)),
+                modifier = Modifier
+                    .align(alignment = Alignment.BottomEnd)
+                    .clip(RoundedCornerShape(12.dp))
+            ) {
+                Text(">")
+            }
+            Button(
+                onClick = {
+                    if (Chap > 0) Chap--
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF8caaee)),
+                modifier = Modifier
+                    .align(alignment = Alignment.BottomStart)
+                    .clip(RoundedCornerShape(12.dp))
+            ) {
+                Text("<")
+            }
+
             if (Load) {
                 CircularProgressIndicator(
                     modifier = Modifier
@@ -238,9 +267,7 @@ data class Reader(val Chaplink : List<String>, val link: String) : Screen {
                     }
                 }
             }
-
         }
-
         Button(
             onClick = {
                 navigator?.pop()
@@ -343,7 +370,7 @@ fun Body(Name : List<String>, Link : List<String>, sum : List<String>) {
                         .clickable {
                             val link = river._BasePage+Link[index]
                             println(link)
-                            navigator?.push(Reader(Link, link))
+                            navigator?.push(Reader(Link, link, index))
                         }
                         .padding(10.dp),
                     color = Color(0xFFc6d0f5),
