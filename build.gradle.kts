@@ -1,3 +1,4 @@
+import org.jetbrains.compose.desktop.application.dsl.ProguardSettings
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
@@ -34,7 +35,7 @@ compose.desktop {
         mainClass = "MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Exe, TargetFormat.AppImage, TargetFormat.Deb)
             packageName = "Umei"
             packageVersion = "1.0.0"
         }

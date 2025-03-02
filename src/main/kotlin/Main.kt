@@ -41,7 +41,7 @@ fun LoadImg(link : String) {
     )
 }
 @Composable
-fun LoadMain(imageUrl: String, description: String, Link : String) {
+fun LoadMain(imageUrl: String, description: String, Link : String, Page: Int) {
     val navigator = LocalNavigator.current
     var Change = 0
     Column (
@@ -60,7 +60,7 @@ fun LoadMain(imageUrl: String, description: String, Link : String) {
                 .clickable {
                     println(river._BasePage+Link)
                     val FunctionnalLink = river._BasePage+Link
-                    navigator?.push(NovelDetail("https://wsrv.nl/?url="+imageUrl, description, FunctionnalLink))
+                    navigator?.push(NovelDetail("https://wsrv.nl/?url="+imageUrl, description, FunctionnalLink, Page))
                     Change = 2
                            },
             contentScale = ContentScale.Crop
@@ -74,7 +74,7 @@ fun LoadMain(imageUrl: String, description: String, Link : String) {
     }
 }
 
-class HomeScreen() : Screen {
+data class HomeScreen(val Page : Int, var T : Boolean) : Screen {
     @Composable
     @Preview
     override fun Content() {
@@ -83,6 +83,12 @@ class HomeScreen() : Screen {
         val novelNames = remember { mutableStateListOf<String>() }
         val novellink = remember { mutableStateListOf<String>() }
         var Loading by remember { mutableStateOf(true) }
+
+        LaunchedEffect(T) {
+            page = Page
+            T = false
+        }
+
         LaunchedEffect(page) {
             val result = withContext(Dispatchers.IO) {
                 river.TrangChu(page)
@@ -136,7 +142,7 @@ class HomeScreen() : Screen {
                         .background(color = Color(0xFF232634))
                         .fillMaxSize(),
                     content = {
-                        items(novelNames.size) { index -> LoadMain(novelCovers[index], novelNames[index], novellink[index]) }
+                        items(novelNames.size) { index -> LoadMain(novelCovers[index], novelNames[index], novellink[index], page+1) }
                         item {
                             Text("Number of times pressed: " + page.toString(), color = Color(0xFF232634))
                         }
@@ -368,7 +374,7 @@ fun Body(Name : List<String>, Link : List<String>, sum : List<String>) {
     }
 }
 
-data class NovelDetail(val Img: String, val name: String, val link : String) : Screen {
+data class NovelDetail(val Img: String, val name: String, val link : String, val page : Int) : Screen {
     @Composable
     override fun Content() {
         var IsLoading by remember { mutableStateOf(true) }
@@ -415,7 +421,7 @@ data class NovelDetail(val Img: String, val name: String, val link : String) : S
             }
             Button(
                 onClick = {
-                    navigator?.pop()
+                    navigator?.push(HomeScreen(page, true))
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF8caaee)),
                 modifier = Modifier
@@ -434,6 +440,6 @@ fun main() = application {
         title = "Umei",
         undecorated = false
     ) {
-        Navigator(HomeScreen())
+        Navigator(HomeScreen(1,true))
     }
 }
