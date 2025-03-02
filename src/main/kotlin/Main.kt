@@ -143,9 +143,6 @@ data class HomeScreen(val Page : Int, var T : Boolean) : Screen {
                         .fillMaxSize(),
                     content = {
                         items(novelNames.size) { index -> LoadMain(novelCovers[index], novelNames[index], novellink[index], page+1) }
-                        item {
-                            Text("Number of times pressed: " + page.toString(), color = Color(0xFF232634))
-                        }
                     }
                 )
             }
