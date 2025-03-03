@@ -39,5 +39,8 @@ compose.desktop {
             packageName = "Umei"
             packageVersion = "1.0.0"
         }
+        buildTypes.release.proguard {
+            isEnabled = false
+        }
     }
 }

@@ -23,10 +23,10 @@ class driver {
             TruyenList.add(Title)
             TruyenLink.add(Link)
             BiaTruyen.add(Img)
-            println(page.toString() + Title)
-            println(Link)
-            println(Img)
-            println("----------------------------------------------------------------------------------------------------------------")
+//            println(page.toString() + Title)
+//            println(Link)
+//            println(Img)
+//            println("----------------------------------------------------------------------------------------------------------------")
         }
     }
 

@@ -11,9 +11,11 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -58,7 +60,7 @@ fun LoadMain(imageUrl: String, description: String, Link : String, Page: Int) {
                 .height(210.dp)
                 .width(170.dp)
                 .clickable {
-                    println(river._BasePage+Link)
+//                    println(river._BasePage+Link)
                     val FunctionnalLink = river._BasePage+Link
                     navigator?.push(NovelDetail("https://wsrv.nl/?url="+imageUrl, description, FunctionnalLink, Page))
                     Change = 2
@@ -157,8 +159,8 @@ data class Reader(val Chaplink : List<String>, val link: String, val chap : Int)
         var content = remember { mutableStateListOf<String>() }
         var Load by remember { mutableStateOf(true) }
         var Chap by remember { mutableStateOf(chap) }
-        println(Chap)
-        println(Chaplink.size)
+//        println(Chap)
+//        println(Chaplink.size)
         river.Clear()
         LaunchedEffect(Chap) {
             val I = withContext(Dispatchers.IO) {
@@ -184,6 +186,7 @@ data class Reader(val Chaplink : List<String>, val link: String, val chap : Int)
                 modifier = Modifier
                     .align(alignment = Alignment.BottomEnd)
                     .clip(RoundedCornerShape(12.dp))
+                    .alpha(0.4f)
             ) {
                 Text(">")
             }
@@ -195,6 +198,7 @@ data class Reader(val Chaplink : List<String>, val link: String, val chap : Int)
                 modifier = Modifier
                     .align(alignment = Alignment.BottomStart)
                     .clip(RoundedCornerShape(12.dp))
+                    .alpha(0.4f)
             ) {
                 Text("<")
             }
@@ -243,6 +247,7 @@ data class Reader(val Chaplink : List<String>, val link: String, val chap : Int)
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF8caaee)),
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
+                .alpha(0.4f)
         ) {
             Text("Back")
         }
@@ -337,7 +342,7 @@ fun Body(Name : List<String>, Link : List<String>, sum : List<String>) {
                     modifier = Modifier
                         .clickable {
                             val link = river._BasePage+Link[index]
-                            println(link)
+//                            println(link)
                             navigator?.push(Reader(Link, link, index))
                         }
                         .padding(10.dp),
