@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.ProguardSettings
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
