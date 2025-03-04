@@ -1,4 +1,4 @@
-Current state: usable with some workarounds
+Current state: usable with some workarounds(bug machine) 
 
 ### Images:
 
