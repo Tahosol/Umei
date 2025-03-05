@@ -38,7 +38,6 @@ class driver {
     val ChuongName : MutableList<String> = mutableListOf()
 
     fun TrangTruyen(_Truyen : String) {
-        Thread.sleep(1000)
         val Truyen = _Truyen
         val driver = Jsoup.connect(Truyen).get()
 //      val driver = Jsoup.connect("https://ln.hako.vn/truyen/20806-shannon-muon-di-chet").get()
@@ -67,7 +66,6 @@ class driver {
     val read : MutableList<String> = mutableListOf()
 
     fun Reader(_Ch : String) {
-        Thread.sleep(1000)
         val Ch = _Ch
 //        println(_BasePage+ChuongLink[Ch])
         val driver = Jsoup.connect(_Ch).get()
