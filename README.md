@@ -1,6 +1,6 @@
-Current state: Unusable
+Current state: usable with some workarounds(bug machine) 
 
-### Images
+### Images:
 
 
 <div align="center">
