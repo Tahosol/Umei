@@ -59,7 +59,7 @@ data class NovelDetail(val Img: String, val name: String, val link : String, val
                 verticalArrangement = Arrangement.Center
             ) {
                 if (!IsLoading) {
-                    Top(Img, name, Like, Tacgia, Theloai)
+                    Top(Img, name, Like, Tacgia, Theloai, link)
                     Body(Chuong, ChuongLink, Sum)
                 } else {
                     CircularProgressIndicator(
@@ -84,7 +84,7 @@ data class NovelDetail(val Img: String, val name: String, val link : String, val
     }
 }
 @Composable
-fun Top(img : String, name : String, likes : String, Tacgia : String, Theloai : List<String>) {
+fun Top(img : String, name : String, likes : String, Tacgia : String, Theloai : List<String>, link: String) {
     Row(
         modifier = Modifier
             .background(color = Color(0xFF232634))
@@ -148,6 +148,13 @@ fun Top(img : String, name : String, likes : String, Tacgia : String, Theloai : 
                 modifier = Modifier
                     .padding(16.dp)
             )
+//            Button(
+//                onClick = {
+//                    datawork.save(name, link, img)
+//                }
+//            ) {
+//                Text("Follow")
+//            }
         }
     }
 }

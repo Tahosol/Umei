@@ -29,6 +29,7 @@ import coil3.compose.AsyncImage
 import kotlinx.coroutines.*
 
 val river = driver()
+val datawork = Datawork()
 
 fun main() = application {
     Window(

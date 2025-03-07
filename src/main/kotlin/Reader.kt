@@ -60,7 +60,6 @@ data class Reader(val Chaplink : List<String>, val link: String, val chap : Int)
                 .background(color = Color(0xFF232634)),
             contentAlignment = Alignment.Center
         ) {
-
             Button(
                 onClick = {
                     if (Chap < Chaplink.size - 1) Chap++
