@@ -1,5 +1,6 @@
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class Datawork {
@@ -12,7 +13,6 @@ class Datawork {
         val Novelimg = varchar("Img", 255)
         override val primaryKey = PrimaryKey(id, name = "Novel_ID")
     }
-
     fun save(_Name : String, _Link : String, _Img : String) {
         Database.connect("jdbc:sqlite:NovelsFollow.db", driver = "org.sqlite.JDBC")
 

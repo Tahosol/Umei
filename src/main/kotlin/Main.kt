@@ -38,5 +38,6 @@ fun main() = application {
         undecorated = false
     ) {
         Navigator(HomeScreen(1,true))
+//        datawork.fetch()
     }
 }

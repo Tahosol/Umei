@@ -32,6 +32,7 @@ data class NovelDetail(val Img: String, val name: String, val link : String, val
         var ChuongLink = remember { mutableStateListOf<String>() }
         var Chuong = remember { mutableStateListOf<String>() }
         var Sum = remember { mutableStateListOf<String>() }
+        var Theloai = remember { mutableStateListOf<String>() }
         river.Clear()
         LaunchedEffect(Unit) {
             val i = withContext(Dispatchers.IO) {
@@ -39,6 +40,7 @@ data class NovelDetail(val Img: String, val name: String, val link : String, val
                 ChuongLink.addAll(river.ChuongLink)
                 Chuong.addAll(river.ChuongName)
                 Sum.addAll(river.Sum)
+                Theloai.addAll(river.TheLoai)
                 IsLoading = false
             }
         }
@@ -46,7 +48,6 @@ data class NovelDetail(val Img: String, val name: String, val link : String, val
 
         val Like = river.Likes
         val Tacgia = river.Tacgia
-        val Theloai : List<String> = river.TheLoai
         Box(
             modifier = Modifier
                 .background(color = Color(0xFF232634))
@@ -115,22 +116,20 @@ fun Top(img : String, name : String, likes : String, Tacgia : String, Theloai : 
                 modifier = Modifier
                     .padding(5.dp),
             ) {
-                val RTheLoai = Theloai.take(Theloai.size/2)
-                for (Strin in RTheLoai) {
-                    item {
-                        Box(
+                items(Theloai.size) { index ->
+                    println(Theloai[index])
+                    Box(
+                        modifier = Modifier
+                            .padding(5.dp)
+                            .border(1.dp, Color(0xFFc6d0f5), shape = RoundedCornerShape(10.dp))
+                    ) {
+                        Text(
+                            text = Theloai[index],
+                            color = Color(0xFFc6d0f5),
                             modifier = Modifier
-                                .padding(10.dp)
-                                .border(1.dp, Color(0xFFc6d0f5))
-                        ) {
-                            Text(
-                                text = Strin,
-                                color = Color(0xFFc6d0f5),
-                                modifier = Modifier
-                                    .padding(16.dp),
-                                fontSize = 18.sp
-                            )
-                        }
+                                .padding(16.dp),
+                            fontSize = 18.sp
+                        )
                     }
                 }
             }
@@ -166,47 +165,57 @@ fun Body(Name : List<String>, Link : List<String>, sum : List<String>) {
             .padding(16.dp)
             .fillMaxSize()
     ) {
-        LazyColumn(
+        Box(
             modifier = Modifier
-                .border(3.dp, color = Color(0xFFc6d0f5))
-                .padding(16.dp)
-                .width(800.dp)
+                .padding(10.dp)
         ) {
-            items(Name.size) { index ->
-                Text(
-                    text = Name[index],
-                    modifier = Modifier
-                        .clickable {
-                            val link = river._BasePage+Link[index]
+            LazyColumn(
+                modifier = Modifier
+                    .border(3.dp, color = Color(0xFFc6d0f5), shape = RoundedCornerShape(10.dp))
+                    .padding(16.dp)
+                    .width(800.dp)
+            ) {
+                items(Name.size) { index ->
+                    Text(
+                        text = Name[index],
+                        modifier = Modifier
+                            .clickable {
+                                val link = river._BasePage+Link[index]
 //                            println(link)
-                            navigator?.push(Reader(Link, link, index))
-                        }
-                        .padding(10.dp),
-                    color = Color(0xFFc6d0f5),
-                    fontSize = 23.sp
-                )
+                                navigator?.push(Reader(Link, link, index))
+                            }
+                            .padding(10.dp),
+                        color = Color(0xFFc6d0f5),
+                        fontSize = 23.sp
+                    )
+                }
             }
         }
-        Column(
+        Box(
             modifier = Modifier
-                .border(3.dp, color = Color(0xFFc6d0f5))
-                .padding(16.dp)
+                .padding(10.dp)
         ) {
-            Text(
-                text = "Summary",
-                color = Color(0xFFc6d0f5),
+            Column(
                 modifier = Modifier
-                    .padding(10.dp),
-                fontSize = 28.sp
-            )
-            for (item in sum) {
+                    .border(3.dp, color = Color(0xFFc6d0f5), shape = RoundedCornerShape(10.dp))
+                    .padding(16.dp)
+            ) {
                 Text(
-                    text = item,
+                    text = "Summary",
                     color = Color(0xFFc6d0f5),
                     modifier = Modifier
                         .padding(10.dp),
-                    fontSize = 26.sp
+                    fontSize = 28.sp
                 )
+                for (item in sum) {
+                    Text(
+                        text = item,
+                        color = Color(0xFFc6d0f5),
+                        modifier = Modifier
+                            .padding(10.dp),
+                        fontSize = 26.sp
+                    )
+                }
             }
         }
     }
