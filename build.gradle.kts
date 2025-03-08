@@ -24,6 +24,7 @@ dependencies {
     implementation("org.jsoup:jsoup:1.18.3")
     implementation("io.coil-kt.coil3:coil-compose:3.1.0")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
+    implementation("io.coil-kt.coil3:coil-svg:3.1.0")
     implementation("cafe.adriel.voyager:voyager-navigator:1.0.1")
     implementation("cafe.adriel.voyager:voyager-tab-navigator:1.0.1")
     implementation("cafe.adriel.voyager:voyager-transitions:1.0.1")
@@ -41,6 +42,12 @@ compose.desktop {
             targetFormats(TargetFormat.Exe, TargetFormat.AppImage, TargetFormat.Deb)
             packageName = "Umei"
             packageVersion = "1.0.0"
+            linux {
+                iconFile.set(project.file("src/main/resources/logo.png"))
+            }
+            windows {
+                iconFile.set(project.file("src/main/resources/logo.ico"))
+            }
         }
         buildTypes.release.proguard {
             isEnabled = false

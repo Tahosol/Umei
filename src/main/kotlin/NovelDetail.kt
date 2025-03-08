@@ -96,17 +96,20 @@ fun Top(img : String, name : String, likes : String, Tacgia : String, Theloai : 
             model = img,
             contentDescription = name,
             modifier = Modifier
-                .padding(26.dp)
+                .padding(32.dp)
                 .clip(RoundedCornerShape(7.dp))
                 .background(Color.Gray)
                 .shadow(5.dp, RoundedCornerShape(7.dp))
                 .border(3.dp, color = Color(0xFFc6d0f5)),
             contentScale = ContentScale.Crop
         )
-        Column() {
+        Column(
+            modifier = Modifier
+                .padding(18.dp)
+        ) {
             Text(
                 modifier = Modifier
-                    .padding(28.dp),
+                    .padding(5.dp),
                 text = name,
                 fontSize = 36.sp,
                 color = Color(0xFFc6d0f5),
@@ -117,7 +120,6 @@ fun Top(img : String, name : String, likes : String, Tacgia : String, Theloai : 
                     .padding(5.dp),
             ) {
                 items(Theloai.size) { index ->
-                    println(Theloai[index])
                     Box(
                         modifier = Modifier
                             .padding(5.dp)
@@ -147,13 +149,13 @@ fun Top(img : String, name : String, likes : String, Tacgia : String, Theloai : 
                 modifier = Modifier
                     .padding(16.dp)
             )
-//            Button(
-//                onClick = {
-//                    datawork.save(name, link, img)
-//                }
-//            ) {
-//                Text("Follow")
-//            }
+            Button(
+                onClick = {
+                    datawork.save(name, link, img)
+                }
+            ) {
+                Text("Follow")
+            }
         }
     }
 }

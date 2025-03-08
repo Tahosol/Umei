@@ -11,8 +11,9 @@ class Datawork {
         val names = varchar("name", 255)
         val novellink = varchar("link", 255)
         val Novelimg = varchar("Img", 255)
-        override val primaryKey = PrimaryKey(id, name = "Novel_ID")
+        override val primaryKey = PrimaryKey(id)
     }
+
     fun save(_Name : String, _Link : String, _Img : String) {
         Database.connect("jdbc:sqlite:NovelsFollow.db", driver = "org.sqlite.JDBC")
 
