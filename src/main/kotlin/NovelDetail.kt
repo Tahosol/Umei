@@ -149,13 +149,13 @@ fun Top(img : String, name : String, likes : String, Tacgia : String, Theloai : 
                 modifier = Modifier
                     .padding(16.dp)
             )
-            Button(
-                onClick = {
-                    datawork.save(name, link, img)
-                }
-            ) {
-                Text("Follow")
-            }
+//            Button(
+//                onClick = {
+//                    datawork.save(name, link, img)
+//                }
+//            ) {
+//                Text("Follow")
+//            }
         }
     }
 }
