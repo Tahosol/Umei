@@ -1,5 +1,6 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.*
@@ -26,6 +27,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import coil3.compose.AsyncImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.awt.Toolkit
 
 @Composable
 fun LoadMain(imageUrl: String, description: String, Link : String, Page: Int) {
@@ -106,6 +108,9 @@ data class HomeScreen(val Page : Int, var T : Boolean) : Screen {
             }
         }
         var search by remember { mutableStateOf("") }
+        val screenSize = Toolkit.getDefaultToolkit().screenSize
+        val screenWidth = screenSize.width
+        val halfscreenwidth = screenWidth/2
         Box(modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF232634)),
@@ -124,17 +129,17 @@ data class HomeScreen(val Page : Int, var T : Boolean) : Screen {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(15.dp)
+                            .padding(top = 10.dp,start = 60.dp, end = 60.dp)
                     ) {
-                        Box(modifier = Modifier.width(60.dp))
                         TextField(
                             value = search,
                             onValueChange = { newText -> search = newText },
                             label = { Text("Search")},
                             singleLine = true,
                             modifier = Modifier
+                                .border(1.dp, Color(0xFFc6d0f5), shape = RoundedCornerShape(10.dp))
                                 .clip(shape = RoundedCornerShape(30.dp))
-                                .width(400.dp),
+                                .width(halfscreenwidth.dp),
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                             keyboardActions = KeyboardActions(
                                 onSearch = {
