@@ -23,7 +23,7 @@ class driver {
             TruyenList.add(Title)
             TruyenLink.add(Link)
             BiaTruyen.add(Img)
-//            println(page.toString() + Title)
+            println(page.toString() + Title)
 //            println(Link)
 //            println(Img)
 //            println("----------------------------------------------------------------------------------------------------------------")
@@ -83,5 +83,8 @@ class driver {
         Sum.clear()
         ChuongLink.clear()
         ChuongName.clear()
+    }
+    fun Search() {
+
     }
 }
